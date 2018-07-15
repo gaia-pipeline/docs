@@ -19,7 +19,7 @@ The first input field is the place where you tell Gaia which git repository shou
 For now you can use our example go pipeline. Just paste <a href="https://github.com/gaia-pipeline/go-example" target="_blank">https://github.com/gaia-pipeline/go-example</a> into it. <br />
 Gaia automatically looks up the repository and finds out which branches are available. By default, the master-branch is selected if available. <br />
 
-The next input field determines what Name your pipeline should have. We all know it's hard to find names but <br />
+The next input field determines what Name your pipeline should have. We all know naming things is hard but <br />
 try to find a name which is short, unique and even after a long period of time you know what the pipeline does. <br />
 
 On the right side you choose the programming language for your pipeline. By default it is go and currently <br >

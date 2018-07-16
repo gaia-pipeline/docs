@@ -12,4 +12,4 @@ Welcome to the tutorials section. You can find here various guides for common sc
 
 ### Available Guides
 
-* [Kubernetes deployment with vault integration]({{%relref "tutorials/kube_vault_deploy/_index.md"%}})
+* [Kubernetes deployment with vault integration]({{%relref "tutorials/kube-vault-deploy/_index.md"%}})

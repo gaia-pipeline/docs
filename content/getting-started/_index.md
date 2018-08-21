@@ -17,7 +17,7 @@ Essential features might be missing and you will probably face critical errors.
 Gaia is an open source automation platform which makes it easy and fun to build powerful pipelines in any programming language. <br /> 
 Based on <a href="https://github.com/hashicorp/go-plugin" target="_blank">HashiCorp's go-plugin</a> and <a href="https://grpc.io/" target="_blank">gRPC</a>, gaia is efficient, fast, lightweight and developer friendly. <br />
 
-Develop pipelines with the help of SDKs (currently only Go) and simply check-in your code into a git repository. <br /> 
+Develop pipelines with the help of SDKs and simply check-in your code into a git repository. <br /> 
 Gaia automatically clones your code repository, compiles your code to a binary and executes it on-demand. <br />
 All results are streamed back and formatted to a user-friendly graphical output.
 <br /><br />

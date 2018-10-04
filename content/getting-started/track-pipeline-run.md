@@ -1,7 +1,7 @@
 ---
-title: "2 - Track your pipeline run"
+title: "3 - Track your pipeline run"
 description: "Track your pipeline run"
-weight: 30
+weight: 40
 ---
 
 #### Track your pipeline run

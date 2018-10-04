@@ -1,7 +1,7 @@
 ---
-title: "3 - Final words"
+title: "4 - Final words"
 description: "Final words"
-weight: 40
+weight: 50
 ---
 
 #### Final words

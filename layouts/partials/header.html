@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="{{.Site.BaseURL}}css/header.css" />
 
 {{ $header := print "_header." .Lang }}
-	{{ range where .Site.Pages "Source.BaseFileName" $header }}
+	{{ range where .Site.Pages ".File.BaseFileName" $header }}
 	{{ .Content }} 
 	{{else}}
   {{ if .Site.GetPage "page" "_header.md" }}

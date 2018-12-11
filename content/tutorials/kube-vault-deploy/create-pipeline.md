@@ -1,10 +1,10 @@
 ---
-title: "1 - Create Pipeline"
-description: "Create Pipeline written in Go"
+title: "2 - Create Pipeline"
+description: "Create Gaia Pipeline in Go"
 weight: 20
 ---
 
-## Create a Pipeline in Go
+## Create Gaia Pipeline in Go
 
 Run the following command in your terminal to get the pipeline code:
 

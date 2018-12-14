@@ -6,10 +6,10 @@ weight: 10
 
 ## Setup
 
-Let's start with the first step which is the setup of Vault and Gaia. Run the following commands in your terminal:
+The first step is to download and start HashiCorp Vault as well as Gaia and join them the same docker network. For this tutorial we will use Docker but you can also install them manually if you prefer this installation method. Run the following commands in your terminal:
 
 ```
-docker network create gaia-rocks
+docker network create gaia-vault
 ```
 
 ```
@@ -17,21 +17,25 @@ docker run --cap-add=IPC_LOCK -d \
     -e 'VAULT_DEV_ROOT_TOKEN_ID=root-token' \
     -e 'VAULT_ADDR=http://localhost:8200' \
     -e 'VAULT_TOKEN=root-token' \
-    -p 8200:8200 --name=vault --net=gaia-rocks vault:latest
+    -p 8200:8200 --name=vault --net=gaia-vault vault:latest
 ```
 
 ```
-docker run -d -p 8080:8080 --net=gaia-rocks --name=gaia gaiapipeline/gaia:latest
+docker run -d -p 8080:8080 --net=gaia-vault --name=gaia gaiapipeline/gaia:latest
 ```
 
-This will first create a network. Then we start vault which joins this network with a development token (keep in mind this is a test environment. Don't do this in production!) and expose it on port 8200. The last command starts Gaia on port 8080 and also joins the network. Gaia is now able to send requests to Vault.
+This will create a network called `gaia-vault` which is used to allow communication between Gaia and HashiCorp Vault. Then we start HashiCorp Vault with a development token (Don't do this in production!). We expose the service on port 8200 which is optional and can be omitted if prefered. The last command starts Gaia and exposes it on port 8080. 
+For this tutorial we don't mount the data directory to the host system. This means if you restart the Gaia Docker container all your data is lost. If you want to persist your data you can mount the data folder via the following parameter: `-v $PWD:/data`.
 <br /><br />
 
-## Store Kube-Config and more information into Vault
+## Store Kube-Config into Vault
 
-We will use Vault to safely store all our deployment information. For now, it will be only the Kube-Config and the version information of the Docker Image but you could actually store everything you want into Vault! 
+The Kube-Config is particularly important for the connection to the Kubernetes API. It tells the Kube-Client (usually kubectl) where the API is located and a certificate for authentication and authorization purpose.
+If you use the local Kubernetes cluster from Docker for Mac or Docker for Windows the Kube-Config should be already generated and placed on your file system (usually ~/.kube/config).
+Our Gaia pipeline should have later access to the Kubernetes API and therefore needs access to this Kube-Config file.
+The perfect place for this sensitive file is HashiCorp Vault where we will save it now.
 
-I assume that vault is not locally installed. If you have vault locally installed and did set VAULT_ADDR and VAULT_TOKEN correctly you can skip the next two steps. 
+Let's assume that HashiCorp Vault is not locally installed. If you have HashiCorp Vault locally installed and did set VAULT_ADDR and VAULT_TOKEN correctly you can skip the next two steps. 
 
 Copy your Kube-Config into the Vault container:
 
@@ -45,17 +49,11 @@ Now we have to get into the container to have access to the vault client:
 docker exec -it vault sh
 ```
 
-We are now in the container and have access to the vault client. We already set VAULT_ADDR and VAULT_TOKEN during the startup so we can now directly use the vault client to store our kube-config:
+We are now in the container and have access to the vault client. We already set VAULT_ADDR and VAULT_TOKEN during the startup so we can now directly use the vault client to store our Kube-Config:
 
 ```
 vault kv put secret/kube-conf conf="$(cat /tmp/config | base64)"
 ```
 
-We encoded our config in Base64 so there are no problems with special characters. Let us now add an additional secret for the docker image version information:
-
-```
-vault kv put secret/nginx version="1.14.0"
-```
-
-That's it!
+We encoded our config in Base64 so there are no problems with special characters. 
 Let's continue with the next chapter: [{{%icon circle-arrow-right%}}1 - Create Pipeline]({{%relref "tutorials/kube-vault-deploy/create-pipeline.md"%}})

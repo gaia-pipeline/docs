@@ -1,35 +1,57 @@
 ---
-title: "2 - Create Pipeline"
+title: "1 - Create Pipeline"
 description: "Create Gaia Pipeline in Go"
 weight: 20
 ---
 
 ## Create Gaia Pipeline in Go
 
-Run the following command in your terminal to get the pipeline code:
+The full pipeline code is available on github: <a href="https://github.com/gaia-pipeline/tutorial-k8s-deployment-go" target="_blank">k8s deployment tutorial code</a>
+If you have go installed locally you can run the following command in your terminal to get the pipeline code:
 
 ```
 go get github.com/gaia-pipeline/tutorial-k8s-deployment-go
 ```
 
-Open now the pipeline in your favorite editor:
+Otherwise simply clone the source code:
 
 ```
-$GOPATH/src/github.com/gaia-pipeline/tutorial-k8s-deployment-go
+git clone https://github.com/gaia-pipeline/tutorial-k8s-deployment-go
 ```
 
+Open now the pipeline in your favorite editor.
 Let's go through the code step by step from the `main.go` file:
 
 ```go
 // GetSecretsFromVault retrieves all information and credentials
-// from vault and saves it to local space.
-func GetSecretsFromVault() error {
-	// Create vault client
-	vaultClient, err := connectToVault()
+// from vault and stores it in cache.
+func GetSecretsFromVault(args sdk.Arguments) error {
+	// Get vault credentials
+	for _, arg := range args {
+		switch arg.Key {
+		case "vault-token":
+			vaultToken = arg.Value
+		case "vault-address":
+			vaultAddress = arg.Value
+		}
+	}
+
+	// Create new Vault client instance
+	vaultClient, err := vaultapi.NewClient(vaultapi.DefaultConfig())
 	if err != nil {
 		log.Printf("Error: %s\n", err.Error())
 		return err
 	}
+
+	// Set vault address
+	err = vaultClient.SetAddress(vaultAddress)
+	if err != nil {
+		log.Printf("Error: %s\n", err.Error())
+		return err
+	}
+
+	// Set token
+	vaultClient.SetToken(vaultToken)
 
 	// Read kube config from vault and decode base64
 	l := vaultClient.Logical()
@@ -53,43 +75,68 @@ func GetSecretsFromVault() error {
 	confStr = strings.Replace(confStr, "localhost", hostDNSName, 1)
 	kubeConf = []byte(confStr)
 
-	// Write kube config to file
-	if err = writeToFile(kubeLocalPath, kubeConf); err != nil {
-		log.Printf("Error: %s\n", err.Error())
-		return err
-	}
-
-	// Read app image version from vault
-	v, err := l.Read(appVersionVaultPath)
+	// Create file
+	f, err := os.Create(kubeLocalPath)
 	if err != nil {
 		log.Printf("Error: %s\n", err.Error())
 		return err
 	}
+	defer f.Close()
 
-	// Write image version to file
-	version := (v.Data["data"].(map[string]interface{}))["version"].(string)
-	if err = writeToFile(appVersionLocalPath, []byte(version)); err != nil {
-		log.Printf("Error: %s\n", err.Error())
-		return err
-	}
+	// Write to file
+	_, err = f.Write(kubeConf)
+
 	log.Println("All data has been retrieved from vault!")
 	return nil
 }
 ```
 
-This job uses the vault go-client to retrieve our saved information from vault. It will replace the hostname from the API-Server which should be "localhost" with the magic DNS name "host.docker.internal". Due to a <a href="https://github.com/gaia-pipeline/gaia/issues/28" target="_blank">bug in Gaia</a> it is currently not possible that two jobs share data during a pipeline run.
-To work around this issue, we write all information to the local space.
+This function (we could also call it a job now) uses the vault go-client to retrieve our saved Kube-Config from vault. It will replace the hostname from the API-Server which should be "localhost" with the magic DNS name "host.docker.internal". 
 
 ```go
-// CreateNamespace creates the namespace for our app.
-// If the namespace already exists nothing will happen.
-func CreateNamespace() error {
-	// Get kubernetes client
-	c, err := getKubeClient(kubeLocalPath)
+// PrepareDeployment prepares the deployment by setting up
+// the kubernetes client and caching all manual input from user.
+func PrepareDeployment(args sdk.Arguments) error {
+	// Setup kubernetes client
+	config, err := clientcmd.BuildConfigFromFlags("", kubeLocalPath)
 	if err != nil {
 		return err
 	}
 
+	clientSet, err = kubernetes.NewForConfig(config)
+	if err != nil {
+		return err
+	}
+
+	// Cache given arguments for other jobs
+	for _, arg := range args {
+		switch arg.Key {
+		case "vault-address":
+			vaultAddress = arg.Value
+		case "image-name":
+			imageName = arg.Value
+		case "replicas":
+			rep, err := strconv.ParseInt(arg.Value, 10, 64)
+			if err != nil {
+				log.Printf("Error: %s\n", err)
+				return err
+			}
+			replicas = int32(rep)
+		case "app-name":
+			appName = arg.Value
+		}
+	}
+
+	return nil
+}
+```
+
+`PrepareDeployment` prepares the connection to the Kubernetes cluster and parses all given arguments. All given arguments are passed in via Gaia's UI. 
+
+```go
+// CreateNamespace creates the namespace for our app.
+// If the namespace already exists nothing will happen.
+func CreateNamespace(args sdk.Arguments) error {
 	// Create namespace object
 	ns := &v1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
@@ -98,8 +145,8 @@ func CreateNamespace() error {
 	}
 
 	// Lookup if namespace already exists
-	nsClient := c.Core().Namespaces()
-	_, err = nsClient.Get(appName, metav1.GetOptions{})
+	nsClient := clientSet.Core().Namespaces()
+	_, err := nsClient.Get(appName, metav1.GetOptions{})
 
 	// namespace exists
 	if err == nil {
@@ -108,7 +155,7 @@ func CreateNamespace() error {
 	}
 
 	// Create namespace
-	_, err = c.Core().Namespaces().Create(ns)
+	_, err = clientSet.Core().Namespaces().Create(ns)
 	if err != nil {
 		return err
 	}
@@ -118,26 +165,12 @@ func CreateNamespace() error {
 }
 ```
 
-`CreateNamespace` creates the namespace and will be skipped if the namespace already exists. Helper/Util functions help us to avoid duplicated code and write clean code.
+`CreateNamespace` creates the namespace and will be skipped if the namespace already exists.
 
 ```go
 // CreateDeployment creates the kubernetes deployment.
 // If it already exists, it will be updated.
-func CreateDeployment() error {
-	// Get kubernetes client
-	c, err := getKubeClient(kubeLocalPath)
-	if err != nil {
-		log.Printf("Error: %s\n", err.Error())
-		return err
-	}
-
-	// Load image version from file
-	v, err := ioutil.ReadFile(appVersionLocalPath)
-	if err != nil {
-		log.Printf("Error: %s\n", err.Error())
-		return err
-	}
-
+func CreateDeployment(args sdk.Arguments) error {
 	// Create deployment object
 	d := &v1beta1.Deployment{}
 	d.ObjectMeta = metav1.ObjectMeta{
@@ -159,7 +192,7 @@ func CreateDeployment() error {
 				Containers: []v1.Container{
 					v1.Container{
 						Name:            appName,
-						Image:           fmt.Sprintf("%s:%s", appName, v),
+						Image:           imageName,
 						ImagePullPolicy: v1.PullAlways,
 						Ports: []v1.ContainerPort{
 							v1.ContainerPort{
@@ -173,8 +206,8 @@ func CreateDeployment() error {
 	}
 
 	// Lookup existing deployments
-	deployClient := c.ExtensionsV1beta1().Deployments(appName)
-	_, err = deployClient.Get(appName, metav1.GetOptions{})
+	deployClient := clientSet.ExtensionsV1beta1().Deployments(appName)
+	_, err := deployClient.Get(appName, metav1.GetOptions{})
 
 	// Deployment already exists
 	if err == nil {
@@ -203,14 +236,7 @@ func CreateDeployment() error {
 ```go
 // CreateService creates the service for our application.
 // If the service already exists, it will be updated.
-func CreateService() error {
-	// Get kubernetes client
-	c, err := getKubeClient(kubeLocalPath)
-	if err != nil {
-		log.Printf("Error: %s\n", err.Error())
-		return err
-	}
-
+func CreateService(args sdk.Arguments) error {
 	// Create service obj
 	s := &v1.Service{
 		ObjectMeta: metav1.ObjectMeta{
@@ -232,7 +258,7 @@ func CreateService() error {
 	}
 
 	// Lookup for existing service
-	serviceClient := c.Core().Services(appName)
+	serviceClient := clientSet.Core().Services(appName)
 	currService, err := serviceClient.Get(appName, metav1.GetOptions{})
 
 	// Service already exists
@@ -260,23 +286,52 @@ func CreateService() error {
 ```
 
 `CreateService` creates the service object if it does not exist. If it exist, it will be updated.
-The last part, the main function, we register all jobs with their respective priority and start the serve function as usual.
+The last part, the main function, we do register all jobs with their respective priority and start the serve function as usual.
 
 Let's have a look at the `main_test.go` file:
 
 ```go
 func TestMain(m *testing.M) {
-	// We change the vault address to localhost and the Kube API-Hostname to localhost.
-	// This allows us to start the starts locally.
-	vaultAddress = "http://localhost:8200"
 	hostDNSName = "localhost"
-	err := GetSecretsFromVault()
+	err := GetSecretsFromVault(sdk.Arguments{
+		sdk.Argument{
+			Type:  sdk.VaultInp,
+			Key:   "vault-token",
+			Value: "root-token",
+		},
+		sdk.Argument{
+			Type:  sdk.VaultInp,
+			Key:   "vault-address",
+			Value: "http://localhost:8200",
+		}})
 	if err != nil {
 		fmt.Printf("Cannot retrieve data from vault: %s\n", err.Error())
 		os.Exit(1)
 	}
 
-	err = CreateNamespace()
+	err = PrepareDeployment(sdk.Arguments{
+		sdk.Argument{
+			Type:  sdk.TextFieldInp,
+			Key:   "image-name",
+			Value: "nginx:1.13",
+		},
+		sdk.Argument{
+			Type:  sdk.TextFieldInp,
+			Key:   "app-name",
+			Value: "nginx",
+		},
+		sdk.Argument{
+			Type:  sdk.TextFieldInp,
+			Key:   "replicas",
+			Value: "1",
+		},
+	})
+	if err != nil {
+		fmt.Printf("Cannot prepare the deployment: %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	err = CreateNamespace(sdk.Arguments{})
 	if err != nil {
 		fmt.Printf("Cannot create namespace: %s\n", err.Error())
 		os.Exit(1)
@@ -287,14 +342,14 @@ func TestMain(m *testing.M) {
 }
 
 func TestCreateService(t *testing.T) {
-	err := CreateService()
+	err := CreateService(sdk.Arguments{})
 	if err != nil {
 		t.Error(err)
 	}
 }
 
 func TestCreateDeployment(t *testing.T) {
-	err := CreateDeployment()
+	err := CreateDeployment(sdk.Arguments{})
 	if err != nil {
 		t.Error(err)
 	}

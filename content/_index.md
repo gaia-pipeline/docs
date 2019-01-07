@@ -34,6 +34,13 @@ You need more information how a setup could look like? Then have a look at this 
 <br />
 <br />
 
+### RFCs
+
+List of RFCs which describe the mechanics of Gaia.
+[{{%icon circle-arrow-right%}}Tutorials]({{%relref "rfcs/_index.md"%}})
+<br />
+<br />
+
 ### Want to contribute?
 
 Gaia can only evolve and become a great product with the help of contributors. <br />

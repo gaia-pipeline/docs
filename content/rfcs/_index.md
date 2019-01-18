@@ -2,7 +2,7 @@
 title: "RFCs"
 description: "This page lists all the RFCs which define major works regarding Gaia."
 weight: 10
-alwaysopen: true
+alwaysopen: false
 ---
 
 ### Introduction

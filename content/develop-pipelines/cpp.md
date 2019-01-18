@@ -305,7 +305,7 @@ int main() {
 You can fork this example <a href="https://github.com/gaia-pipeline/cpp-example/tree/vault_example" target="_blank">here.</a>
 
 {{% notice tip %}}
-You must add a new vault entry with the key `dbpassword` before you can start the below pipeline. An error will be thrown if a pipeline requests a vault parameter which does not exist.
+You must add a new vault entry with the key `dbpassword` before you can start the pipeline below. An error will be thrown if a pipeline requests a vault parameter which does not exist.
 {{% /notice %}}
 
 ```cpp

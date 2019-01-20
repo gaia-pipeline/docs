@@ -33,10 +33,13 @@ touch gaia.gemspec
 ```
 
 Add usual gemspec options:
+{{% notice tip %}}
+Gem name should always include the variable key `${NAME}` which will be automatically replaced during pipeline creation process.
+{{% /notice %}}
 
 ```
 Gem::Specification.new do |s|
-  s.name        = 'gaia'
+  s.name        = '${NAME}'
   s.version     = '0.0.1'
   s.authors     = ["Michel Vocks"]
   s.files       = Dir["{lib}/**/*.rb", "bin/*"]
@@ -50,7 +53,7 @@ Create a lib folder:
 mkdir lib
 ```
 
-Add your entry ruby file in the lib folder. The name of the file should be the same like the name of the gem (`s.name` in gemspec):
+Add your entry ruby file in the lib folder. This file must be named `gaia.rb`. Other files can be named arbitrary: 
 
 ```
 touch lib/gaia.rb

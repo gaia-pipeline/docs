@@ -1,4 +1,4 @@
-# Gaia Documentation
+# Gaia Documentation
 
 This repository contains documentation about [Gaia](https://github.com/gaia-pipeline/gaia).
 

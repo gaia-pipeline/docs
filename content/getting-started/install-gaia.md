@@ -10,7 +10,7 @@ The installation of Gaia is simple and often takes a few minutes.
 
 #### Using Docker
 
-Gaia offers a various amount of docker images available at <a href="https://hub.docker.com/r/gaiapipeline/gaia/" target="_blank">https://hub.docker.com/r/gaiapipeline/gaia/</a>. If you use the `latest` image tag, you will get a docker image which contains everything to build all currently supporterd pipeline languages but also needs more disk-space.
+Gaia offers a various amount of docker images available at <a href="https://hub.docker.com/r/gaiapipeline/gaia/" target="_blank">https://hub.docker.com/r/gaiapipeline/gaia/</a>. If you use the `latest` image tag, you will get a docker image which contains everything to build all currently supported pipeline languages but also needs more disk-space.
 If you are confident that you just want to use one programming language for your pipelines you should consider taking the smaller images which are build just for this language. You can find a list of available images at the <a href="https://hub.docker.com/r/gaiapipeline/gaia/tags/" target="_blank">tags page</a>.
 
 The following command starts Gaia as a daemon process and mounts all data to the current folder. Afterwards,

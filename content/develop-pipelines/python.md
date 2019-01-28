@@ -133,7 +133,7 @@ def main():
 #### Vault parameter example
 
 {{% notice tip %}}
-You must add a new vault entry with the key `dbpassword` before you can start the below pipeline. An error will be thrown if a pipeline requests a vault parameter which does not exist.
+You must add a new vault entry with the key `dbpassword` before you can start the pipeline below. An error will be thrown if a pipeline requests a vault parameter which does not exist.
 {{% /notice %}}
 
 ```python

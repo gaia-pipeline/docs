@@ -16,3 +16,4 @@ Please choose the programming language you prefer:
 * [Java]({{%relref "develop-pipelines/java.md"%}})
 * [Python]({{%relref "develop-pipelines/python.md"%}})
 * [C++]({{%relref "develop-pipelines/cpp.md"%}})
+* [Ruby]({{%relref "develop-pipelines/ruby.md"%}})

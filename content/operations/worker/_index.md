@@ -11,7 +11,7 @@ horizontally whereas vertical scaling works until a specific point has been reac
 problem by providing a remote worker functionality for your Gaia primary instance.
 
 Gaia Workers allow you to dynamically add or remove remote workers to your primary Gaia instance and tag those differently.
-Once a worker has been registered at your primary Gaia instance, new pipeline runs will be automatically be scheduled to
+Once a worker has been registered at your primary Gaia instance, new pipeline runs will be automatically scheduled to
 your worker by matching pipeline tags and worker tags.
 
 While your pipeline run is executed at the remote worker, all pipeline run information like current job status, log
@@ -19,7 +19,7 @@ output and run status, is transferred in real-time to the primary Gaia instance 
 
 The scheduler from the primary Gaia instance automatically monitors and detects the status from remote workers. If a
 worker goes down or loses the connection to the primary Gaia instance, it will automatically be flagged as inactive and
-no further pipeline runs will be scheduled on this node till the node is active again. Additionally, the primary Gaia
+no further pipeline runs will be scheduled to this node till the node is active again. Additionally, the primary Gaia
 instance also monitors the capacity from all workers. If a worker is busy, the pipeline run will be scheduled to a
 different worker or, if all workers are busy, waits in the queue until the next worker has free capacity again.
 

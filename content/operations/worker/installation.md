@@ -6,16 +6,19 @@ weight: 10
 
 ## Download the binary
 
-Gaia Worker is embedded into the normal Gaia binary file. Therefore, the first step is to copy the Gaia binary file to your remote worker host or pull the Gaia docker image from docker hub.
+Gaia Worker is embedded into the normal Gaia binary file. Therefore, the first step is to copy the Gaia binary file to
+your remote worker host or pull the Gaia docker image from docker hub.
 
 ## Configure the worker
 
-Before we can start the worker, we need to configure it. Since Gaia Worker uses the configuration loading mechanism like Gaia, you have a few options to provide the needed configuration.
+Before we can start the worker, we need to configure it. Since Gaia Worker uses the configuration loading mechanism
+like Gaia, you have a few options to provide the needed configuration.
 
 
 ### Configuration file
 
-Provide configuration via a configuration file. Create a new file called `.gaia_config` in the same folder where the Gaia binary is located with the following example configuration:
+Provide configuration via a configuration file. Create a new file called `.gaia_config` in the same folder where the
+Gaia binary is located with the following example configuration:
 
 ```
 hosturl=http://gaia-url.com
@@ -45,4 +48,5 @@ export GAIA_WORKERSECRET=55d79ff1-37b9-595d-a973-65d50e95db85
 
 ## Starting the worker
 
-As soon as the worker configuration is finished, we are able to start the worker. It should only take a few seconds until the worker should be visible in the primary instance UI. If not, please have a look at the worker output logs.
+As soon as the worker configuration is finished, we are able to start the worker. It should only take a few seconds
+until the worker is visible in the primary instance's UI. If not, please have a look at the worker output logs.

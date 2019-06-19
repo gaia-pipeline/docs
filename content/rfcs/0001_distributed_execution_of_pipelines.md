@@ -121,7 +121,7 @@ message PipelineRun {
 message Job {
     uint32   unique_id      = 1;
     string   title          = 2;
-	string   description    = 3;
+    string   description    = 3;
 	repeated Job depends_on = 4;
 	string   status         = 5;
 	repeated Argument args  = 6;
@@ -132,7 +132,7 @@ message Argument {
     string description = 1;
     string type        = 2;
     string key         = 3;
-	string value       = 4;
+    string value       = 4;
 }
 
 // LogChunk represents one chunk of a log file.

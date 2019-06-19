@@ -108,8 +108,8 @@ message PipelineRun {
     int64    id            = 2;
     string   status        = 3;
     int64    start_date    = 4;
-	int64    finish_date   = 5;
-	int64    schedule_date = 6;
+    int64    finish_date   = 5;
+    int64    schedule_date = 6;
     int64    pipeline_id   = 7;
     string   pipeline_name = 8;
     string   pipeline_type = 9;
@@ -120,7 +120,7 @@ message PipelineRun {
 // Job represents one job from a pipeline run.
 message Job {
     uint32   unique_id      = 1;
-	string   title          = 2;
+    string   title          = 2;
 	string   description    = 3;
 	repeated Job depends_on = 4;
 	string   status         = 5;
@@ -130,8 +130,8 @@ message Job {
 // Argument represents one argument from a job.
 message Argument {
     string description = 1;
-	string type        = 2;
-	string key         = 3;
+    string type        = 2;
+    string key         = 3;
 	string value       = 4;
 }
 

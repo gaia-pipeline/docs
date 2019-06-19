@@ -41,6 +41,13 @@ List of RFCs which describe the mechanics of Gaia.
 <br />
 <br />
 
+### Operations
+
+Find useful information about how to operate Gaia and Gaia Worker.
+[{{%icon circle-arrow-right%}}Operations]({{%relref "operations/_index.md"%}})
+<br />
+<br />
+
 ### Want to contribute?
 
 Gaia can only evolve and become a great product with the help of contributors. <br />

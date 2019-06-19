@@ -12,4 +12,4 @@ Welcome to the operations section. Here you can learn how to operate Gaia, Gaia 
 
 ### Subtopics
 
-* [TODO]({{%relref "operations/todo/_index.md"%}})
+* [Gaia Worker]({{%relref "operations/worker/_index.md"%}})

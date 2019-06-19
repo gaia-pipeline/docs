@@ -123,8 +123,8 @@ message Job {
     string   title          = 2;
     string   description    = 3;
     repeated Job depends_on = 4;
-	string   status         = 5;
-	repeated Argument args  = 6;
+    string   status         = 5;
+    repeated Argument args  = 6;
 }
 
 // Argument represents one argument from a job.

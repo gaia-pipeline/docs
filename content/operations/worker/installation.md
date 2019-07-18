@@ -21,12 +21,12 @@ Provide configuration via a configuration file. Create a new file called `.gaia_
 Gaia binary is located with the following example configuration:
 
 ```
-hosturl=http://gaia-url.com
+worker-host-url=http://gaia-url.com
 mode=worker
-workername=my-worker
-grpchosturl=gaia-url.com:8989
-workertags=tag1,tag2,-python
-workersecret=55d79ff1-37b9-595d-a973-65d50e95db85
+worker-name=my-worker
+worker-grpc-host-url=gaia-url.com:8989
+worker-tags=tag1,tag2,-python
+worker-secret=55d79ff1-37b9-595d-a973-65d50e95db85
 ```
 
 ### Environment variables
@@ -34,21 +34,21 @@ workersecret=55d79ff1-37b9-595d-a973-65d50e95db85
 You have the possibility to provide configuration via environment variables. See the example configuration below:
 
 ```
-export GAIA_HOSTURL=http://localhost:8080
+export GAIA_HOST_URL=http://localhost:8080
 export GAIA_MODE=worker
-export GAIA_WORKERNAME=my-worker
-export GAIA_GRPCHOSTURL=localhost:8989
-export GAIA_WORKERTAGS="tag1,tag2,-python"
-export GAIA_WORKERSECRET=55d79ff1-37b9-595d-a973-65d50e95db85
+export GAIA_WORKER_NAME=my-worker
+export GAIA_WORKER_GRPC_HOST_URL=localhost:8989
+export GAIA_WORKER_TAGS="tag1,tag2,-python"
+export GAIA_WORKER_SECRET=55d79ff1-37b9-595d-a973-65d50e95db85
 ```
 
-* HOSTURL (required) - The URL to the Gaia primary instance where this worker should be connected to.
+* WORKER_HOST_URL (required) - The URL to the Gaia primary instance where this worker should be connected to.
 * MODE (required) - Tells Gaia on start which mode it should start in. Since we want to start a worker it should be always "worker".
-* WORKERNAME (optional) - Gives the worker a name which is displayed in the primary Gaia UI. If empty, a random generated name will be set.
-* GRPCHOSTURL (required) - The URL including the port to the Gaia primary instance. Should be mostly like `HOSTURL` but the port should be different.
-* WORKERTAGS (optional) - Tags workers which are matched during pipeline run schedule. Negative tags (for example: -python)
+* WORKE_RNAME (optional) - Gives the worker a name which is displayed in the primary Gaia UI. If empty, a random generated name will be set.
+* WORKER_GRPC_HOSTURL (required) - The URL including the port to the Gaia primary instance. Should be mostly like `HOSTURL` but the port should be different.
+* WORKER_TAGS (optional) - Tags workers which are matched during pipeline run schedule. Negative tags (for example: -python)
 can be used to deactivate automatic set tags by the worker.
-* WORKERSECRET (required) - The global registration secret which is used to register at the Gaia primary instance. Can be obtained in the primary Gaia instance UI (Settings -> Worker).
+* WORKER_SECRET (required) - The global registration secret which is used to register at the Gaia primary instance. Can be obtained in the primary Gaia instance UI (Settings -> Worker).
 
 ## Starting the worker
 

@@ -33,28 +33,26 @@ You can change the data directory with the startup parameter --homepath if you w
 Other startup parameters are also available:
 
     Usage of gaia:
-        -capath string
-    	    Folder path where the generated CA certificate files will be saved
-        -dev
-    	    If true, gaia will be started in development mode. Don't use this in production!
-        -homepath string
-    	    Path to the gaia home folder
-        -hostname string
-    	    The host's name under which gaia is deployed at e.g.: https://gaia-pipeline.com (default "https://localhost")
-        -jwtPrivateKeyPath string
-    	    A RSA private key used to sign JWT tokens
-        -poll
-    	    Instead of using a Webhook, keep polling git for changes on pipelines
-        -port string
-    	    Listen port for gaia (default "8080")
-        -pval int
-    	    The interval in minutes in which to poll vcs for changes (default 1)
-        -vaultpath string
-    	    Path to the gaia vault folder
-        -version
-    	    If true, will print the version and immediately exit
-        -worker string
-    	    Number of worker gaia will use to execute pipelines in parallel (default "2")
+        -ca-path="": Path where the generated CA certificate files will be saved
+        -concurrent-worker=2: Number of concurrent worker the Gaia instance will use to execute pipelines in parallel
+        -config=".gaia_config": this describes the name of the config file to use
+        -dev=false: If true, Gaia will be started in development mode. Don't use this in production!
+        -home-path="": Path to the Gaia home folder where all data will be stored
+        -hostname="https://localhost": The host's name under which Gaia is deployed at e.g.: https://gaia-pipeline.io
+        -jwt-private-key-path="": A RSA private key used to sign JWT tokens used for Web UI authentication
+        -mode="server": The mode which Gaia should be started in. Possible options are server and worker
+        -pipeline-poll=false: If true, Gaia will periodically poll pipeline repositories, watch for changes and rebuild them accordingly
+        -pipeline-poll-interval=1: The interval in minutes in which to poll source repositories for changes
+        -port="8080": Listen port for Gaia
+        -prevent-primary-work=false: If true, prevents the scheduler to schedule work on this Gaia primary instance. Only used in server mode
+        -vault-path="": Path to the Gaia vault folder. By default, will be stored inside the home folder
+        -version=false: If true, will print the version and immediately exit
+        -worker-grpc-host-url="localhost:8989": The host url of an Gaia primary instance gRPC interface used for worker connection. Only used in worker mode
+        -worker-host-url="http://localhost:8080": The host url of an Gaia primary instance to connect to. Only used in worker mode
+        -worker-name="": The name of the worker which will be displayed at the primary instance. Only used in worker mode
+        -worker-secret="": The secret which is used to register a worker at an Gaia primary instance. Only used in worker mode
+        -worker-server-port="8989": Listen port for Gaia primary worker gRPC communication. Only used in server mode
+        -worker-tags="": Comma separated list of custom tags for this worker. Only used in worker mode
 
 ##### Run-time Arguments
 
@@ -64,7 +62,7 @@ It is possible to define run-time arguments in three ways.
 
 For example:
 
-    ./cmd/gaia/main -homepath=${PWD}/tmp -dev=true
+    ./cmd/gaia/main -home-path=${PWD}/tmp -dev=true
 
 ###### Environment Properties
 
@@ -75,7 +73,7 @@ All Environment variables must be pre-fixed with `GAIA_` in order to avoid colli
 For example:
 
     export GAIA_PORT=9999
-    ./cmd/gaia/main -homepath=${PWD}/tmp -dev=true
+    ./cmd/gaia/main -home-path=${PWD}/tmp -dev=true
     # will start gaia with port 9999
     ⇨ http server started on [::]:9999
 
@@ -87,5 +85,5 @@ If this file is present it will be used to set things up. For example:
 
     ❯ cat .gaia_config
     port=9994
-    ./cmd/gaia/main -homepath=${PWD}/tmp -dev=true
+    ./cmd/gaia/main -home-path=${PWD}/tmp -dev=true
     ⇨ http server started on [::]:9994

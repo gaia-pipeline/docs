@@ -358,4 +358,4 @@ func TestCreateDeployment(t *testing.T) {
 
 These are basic tests but in reality you can test whatever you want. There is basically no limitation!
 
-Let's continue with the next chapter: [{{%icon circle-arrow-right%}}2 - Run tests and compile pipeline]({{%relref "tutorials/kube-vault-deploy/run-tests-compile.md"%}})
+Let's continue with the next chapter: [{{<icon circle-arrow-right>}}2 - Run tests and compile pipeline]({{%relref "tutorials/kube-vault-deploy/run-tests-compile.md"%}})

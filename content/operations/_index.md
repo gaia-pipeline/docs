@@ -13,3 +13,4 @@ Welcome to the operations section. Here you can learn how to operate Gaia, Gaia 
 ### Subtopics
 
 * [Gaia Worker]({{%relref "operations/worker/_index.md"%}})
+* [Gaia Docker Pipelines]({{%relref "operations/docker.md"%}})

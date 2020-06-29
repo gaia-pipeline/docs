@@ -1,7 +1,7 @@
 ---
 title: "Gaia Worker" 
 description: "Operations of Gaia Worker"
-weight: 0
+weight: 5
 ---
 
 ## Gaia Worker 

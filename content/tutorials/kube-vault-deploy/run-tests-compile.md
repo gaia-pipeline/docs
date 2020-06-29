@@ -65,5 +65,5 @@ Now we can start our pipeline by clicking on the entry `Overview` and on `Start 
 The execution should be quite fast (usually a 1-5 seconds). 
 You can now verify the results via `kubectl get po -n nginx` after successful execution.
 
-Continue with the last chapter: [{{%icon circle-arrow-right%}}3 - Conclusion]({{%relref "tutorials/kube-vault-deploy/conclusion.md"%}})
+Continue with the last chapter: [{{<icon circle-arrow-right>}}3 - Conclusion]({{%relref "tutorials/kube-vault-deploy/conclusion.md"%}})
 

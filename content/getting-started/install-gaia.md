@@ -33,26 +33,31 @@ You can change the data directory with the startup parameter --homepath if you w
 Other startup parameters are also available:
 
     Usage of gaia:
-        -ca-path="": Path where the generated CA certificate files will be saved
-        -concurrent-worker=2: Number of concurrent worker the Gaia instance will use to execute pipelines in parallel
-        -config=".gaia_config": this describes the name of the config file to use
-        -dev=false: If true, Gaia will be started in development mode. Don't use this in production!
-        -home-path="": Path to the Gaia home folder where all data will be stored
-        -hostname="https://localhost": The host's name under which Gaia is deployed at e.g.: https://gaia-pipeline.io
-        -jwt-private-key-path="": A RSA private key used to sign JWT tokens used for Web UI authentication
-        -mode="server": The mode which Gaia should be started in. Possible options are server and worker
-        -pipeline-poll=false: If true, Gaia will periodically poll pipeline repositories, watch for changes and rebuild them accordingly
-        -pipeline-poll-interval=1: The interval in minutes in which to poll source repositories for changes
-        -port="8080": Listen port for Gaia
-        -prevent-primary-work=false: If true, prevents the scheduler to schedule work on this Gaia primary instance. Only used in server mode
-        -vault-path="": Path to the Gaia vault folder. By default, will be stored inside the home folder
-        -version=false: If true, will print the version and immediately exit
-        -worker-grpc-host-url="localhost:8989": The host url of an Gaia primary instance gRPC interface used for worker connection. Only used in worker mode
-        -worker-host-url="http://localhost:8080": The host url of an Gaia primary instance to connect to. Only used in worker mode
-        -worker-name="": The name of the worker which will be displayed at the primary instance. Only used in worker mode
-        -worker-secret="": The secret which is used to register a worker at an Gaia primary instance. Only used in worker mode
-        -worker-server-port="8989": Listen port for Gaia primary worker gRPC communication. Only used in server mode
-        -worker-tags="": Comma separated list of custom tags for this worker. Only used in worker mode
+          -auto-docker-mode=false: If true, by default runs all pipelines in a docker container
+          -ca-path="": Path where the generated CA certificate files will be saved
+          -concurrent-worker=2: Number of concurrent worker the Gaia instance will use to execute pipelines in parallel
+          -config=".gaia_config": this describes the name of the config file to use
+          -dev=false: If true, Gaia will be started in development mode. Don't use this in production!
+          -docker-host-url="unix:///var/run/docker.sock": Docker daemon host url which is used to build and run pipelines in a docker container
+          -docker-run-image="gaiapipeline/gaia:latest": Docker image repository name with tag which will be used for running pipelines in a docker container
+          -docker-worker-grpc-host-url="": The host url of the primary/worker gRPC endpoint used for docker worker communication
+          -docker-worker-host-url="": The host url of the primary/worker API endpoint used for docker worker communication
+          -home-path="": Path to the Gaia home folder where all data will be stored
+          -hostname="https://localhost": The host's name under which Gaia is deployed at e.g.: https://gaia-pipeline.io
+          -jwt-private-key-path="": A RSA private key used to sign JWT tokens used for Web UI authentication
+          -mode="server": The mode which Gaia should be started in. Possible options are server and worker
+          -pipeline-poll=false: If true, Gaia will periodically poll pipeline repositories, watch for changes and rebuild them accordingly
+          -pipeline-poll-interval=1: The interval in minutes in which to poll source repositories for changes
+          -port="8080": Listen port for Gaia
+          -prevent-primary-work=false: If true, prevents the scheduler to schedule work on this Gaia primary instance. Only used in server mode
+          -vault-path="": Path to the Gaia vault folder. By default, will be stored inside the home folder
+          -version=false: If true, will print the version and immediately exit
+          -worker-grpc-host-url="127.0.0.1:8989": The host url of an Gaia primary instance gRPC interface used for worker connection. Only used in worker mode or for docker runs
+          -worker-host-url="http://127.0.0.1:8080": The host url of an Gaia primary instance to connect to. Only used in worker mode or for docker runs
+          -worker-name="": The name of the worker which will be displayed at the primary instance. Only used in worker mode or for docker runs
+          -worker-secret="": The secret which is used to register a worker at an Gaia primary instance. Only used in worker mode
+          -worker-server-port="8989": Listen port for Gaia primary worker gRPC communication. Only used in server mode
+          -worker-tags="": Comma separated list of custom tags for this worker. Only used in worker mode
 
 ##### Run-time Arguments
 

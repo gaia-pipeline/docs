@@ -56,4 +56,4 @@ vault kv put secret/kube-conf conf="$(cat /tmp/config | base64)"
 ```
 
 We encoded our config in Base64 so there are no problems with special characters. 
-Let's continue with the next chapter: [{{%icon circle-arrow-right%}}1 - Create Pipeline]({{%relref "tutorials/kube-vault-deploy/create-pipeline.md"%}})
+Let's continue with the next chapter: [{{<icon circle-arrow-right>}}1 - Create Pipeline]({{%relref "tutorials/kube-vault-deploy/create-pipeline.md"%}})

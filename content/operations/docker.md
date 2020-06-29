@@ -6,8 +6,8 @@ weight: 10
 
 ## Gaia Docker Pipelines
 
-By default, all pipelines are build and executed on the host machine where Gaia is running on.
-When Gaia is running in a Docker container, pipelines are also build and executed in the same Docker container.
+By default, all pipelines are built and executed on the host machine where Gaia is running.
+When Gaia is running in a Docker container, pipelines are also built and executed in the same Docker container.
 This behavior can be suboptimal in certain cases e.g. when the pipeline needs external libraries which are not available 
 on the host system or when it comes to security considerations around pipelines.
 
@@ -15,8 +15,8 @@ To support these workflows, Gaia allows you to run (not build) your pipelines in
 When a new Pipeline run with Docker mode enabled has been triggered, Gaia automatically pulls the Gaia Docker image
 and starts a new Gaia worker which will connect to the Gaia primary instance. The worker automatically pulls the pipeline
 binary and runs it inside the Docker container. Once the pipeline run is finished, Gaia will deregister the worker and 
-destroy the Container. Pipeline run information like logs and the status are automatically pushed to the primary Gaia
-instance and can be monitored as always in the UI. 
+destroy the container. Pipeline run information like logs and the status are automatically pushed to the primary Gaia
+instance and can be monitored, as always, in the UI.
 
 ### Configuration
 
@@ -45,10 +45,10 @@ Please see an example configuration here:
 
 Gaia allows you to enable Docker pipeline runs via two different options:
  
-1. Set the Docker switch next to the "Start Pipeline"-Button to "Docker enabled" before running the pipeline.
+1. On the UI, set the Docker switch next to the "Start Pipeline" button to "Docker enabled" before running the pipeline.
    This will automatically enable Docker pipeline runs for this pipeline only.
 2. Enable the auto docker mode via "-auto-docker-mode" which will automatically enable Docker pipeline runs
-   for all pipelines globally.
+   for all pipelines globally when starting up Gaia from the command line.
 
 ### Docker Pipelines via Gaia worker
 

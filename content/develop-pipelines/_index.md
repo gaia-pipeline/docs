@@ -1,6 +1,6 @@
 ---
 title: "Develop Pipelines"
-description: "Learn how to develope pipelines in a different programming language."
+description: "Learn how to develop pipelines in a different programming language."
 weight: 15
 alwaysopen: false
 ---

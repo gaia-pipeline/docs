@@ -48,6 +48,13 @@ Find useful information about how to operate Gaia and Gaia Worker.
 <br />
 <br />
 
+### API
+
+Find information about the Gaia API, swagger docs and general information on how to use Gaia without a frontend.
+[{{<icon circle-arrow-right>}}API]({{%relref "api/_index.md"%}})
+<br />
+<br />
+
 ### Want to contribute?
 
 Gaia can only evolve and become a great product with the help of contributors. <br />

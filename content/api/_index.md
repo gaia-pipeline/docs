@@ -45,4 +45,4 @@ On a local instance that's `http://localhost:8080/api/v1/swagger/index.html`.
 
 ### Coming soon
 
-There will also be a self hosted version of this under Gaia docs.
+There will also be a Gaia hosted version of the swagger api docs here.
